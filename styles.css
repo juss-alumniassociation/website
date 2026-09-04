@@ -76,12 +76,14 @@ img {
 }
 
 .brand-masthead {
+  --masthead-height: 270px;
+  --logo-height: 220px;
   position: relative;
-  min-height: 270px;
+  height: var(--masthead-height);
   padding: 2.5rem 1rem;
   background: var(--green);
   overflow: hidden;
-  transition: min-height 180ms ease, padding 180ms ease;
+  transition: height 180ms ease, padding 180ms ease;
 }
 
 .brand-inner {
@@ -101,18 +103,24 @@ img {
   transition: left 180ms ease, transform 180ms ease;
 }
 
+.brand-masthead,
+.brand-logo-link,
+.brand-logo {
+  will-change: height, transform;
+}
+
 .brand-logo {
   display: block;
   width: auto;
-  height: auto;
+  height: var(--logo-height);
   max-width: min(290px, 60vw);
-  max-height: 220px;
-  transition: width 180ms ease, height 180ms ease,
-              max-width 180ms ease, max-height 180ms ease;
+  object-fit: contain;
+  transition: height 180ms ease, max-width 180ms ease;
 }
 
 .site-header.is-compact .brand-masthead {
-  min-height: 64px;
+  --masthead-height: 64px;
+  --logo-height: 50px;
   padding: .4rem 1rem;
 }
 
@@ -122,8 +130,6 @@ img {
 }
 
 .site-header.is-compact .brand-logo {
-  width: auto;
-  height: 50px;
   max-width: 132px;
 }
 
@@ -552,23 +558,20 @@ img {
 
 @media (max-width: 850px) {
   .brand-masthead {
-    min-height: 220px;
+    --masthead-height: 220px;
+    --logo-height: 175px;
   }
 
   .brand-logo {
-    width: auto;
-    height: auto;
     max-width: min(245px, 68vw);
-    max-height: 175px;
   }
 
   .site-header.is-compact .brand-masthead {
-    min-height: 60px;
+    --masthead-height: 60px;
+    --logo-height: 46px;
   }
 
   .site-header.is-compact .brand-logo {
-    width: auto;
-    height: 46px;
     max-width: 122px;
   }
 
@@ -635,25 +638,22 @@ img {
   }
 
   .brand-masthead {
-    min-height: 190px;
+    --masthead-height: 190px;
+    --logo-height: 150px;
     padding: 2rem 1rem;
   }
 
   .brand-logo {
-    width: auto;
-    height: auto;
     max-width: min(220px, 68vw);
-    max-height: 150px;
   }
 
   .site-header.is-compact .brand-masthead {
-    min-height: 56px;
+    --masthead-height: 56px;
+    --logo-height: 42px;
     padding: .35rem 1rem;
   }
 
   .site-header.is-compact .brand-logo {
-    width: auto;
-    height: 42px;
     max-width: 112px;
   }
 
@@ -691,19 +691,6 @@ img {
   .section-cta .text-link,
   .footer-bottom span:last-child {
     margin-top: .75rem;
-  }
-}
-
-@media (hover: none) and (pointer: coarse) {
-  /*
-    Touch scrolling already has inertial motion and browser-chrome movement.
-    Do not animate the fixed header at the same time; switch cleanly between
-    the two states instead.
-  */
-  .brand-masthead,
-  .brand-logo-link,
-  .brand-logo {
-    transition: none;
   }
 }
 
