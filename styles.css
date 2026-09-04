@@ -694,6 +694,19 @@ img {
   }
 }
 
+@media (hover: none) and (pointer: coarse) {
+  /*
+    Touch scrolling already has inertial motion and browser-chrome movement.
+    Do not animate the fixed header at the same time; switch cleanly between
+    the two states instead.
+  */
+  .brand-masthead,
+  .brand-logo-link,
+  .brand-logo {
+    transition: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
