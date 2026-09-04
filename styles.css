@@ -84,7 +84,7 @@ img {
 
 .accent-bar {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   height: 9px;
 }
 
@@ -265,7 +265,9 @@ img {
   background: var(--white);
 }
 
-/* Get involved: a strong green heading band followed by an editorial grid. */
+/* Get involved: editorial rows, not cards.
+   The four house colours appear only as one equal-width rule so they are
+   always represented together and in equal proportion. */
 .involvement {
   background: var(--green-soft);
 }
@@ -294,46 +296,40 @@ img {
   color: #e4f0e6;
 }
 
+.house-rule {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  height: 9px;
+}
+
 .involvement-body {
-  padding: 0 0 clamp(4rem, 7vw, 6rem);
+  padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(4rem, 7vw, 6rem);
 }
 
 .pillar-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border-left: 2px solid var(--green);
-  border-right: 2px solid var(--green);
-  border-bottom: 2px solid var(--green);
-  background: var(--white);
+  display: block;
 }
 
 .pillar {
-  position: relative;
-  min-height: 315px;
-  padding: 2.2rem 2.4rem 2.5rem;
-  border-right: 2px solid var(--green);
+  display: grid;
+  grid-template-columns: 5rem minmax(190px, .7fr) minmax(0, 1.3fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: start;
+  padding: clamp(2rem, 4vw, 3rem) 0;
+  border-top: 2px solid var(--green);
 }
 
 .pillar:last-child {
-  border-right: 0;
+  border-bottom: 2px solid var(--green);
 }
 
 .pillar::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 9px;
-  background: var(--green);
+  content: none;
 }
-
-.pillar-red::before { background: var(--red); }
-.pillar-yellow::before { background: var(--yellow); }
 
 .pillar-number {
   display: block;
-  margin-top: .4rem;
+  margin: .25rem 0 0;
   color: var(--green);
   font-size: .82rem;
   font-weight: 800;
@@ -341,20 +337,21 @@ img {
 }
 
 .pillar h3 {
-  margin: 4rem 0 .9rem;
+  margin: 0;
   color: var(--green-deep);
-  font-size: 1.7rem;
+  font-size: clamp(1.55rem, 2vw, 1.9rem);
+  line-height: 1.15;
 }
 
 .pillar p {
   margin: 0;
-  max-width: 330px;
+  max-width: 620px;
 }
 
 .involvement-cta {
   margin-top: 2rem;
   padding: 1.6rem 0 0;
-  border-top: 2px solid var(--green);
+  border-top: 0;
 }
 
 .section-cta {
@@ -379,18 +376,13 @@ img {
 
 .history-layout {
   display: grid;
-  grid-template-columns: minmax(330px, .62fr) minmax(0, 1.38fr);
-  gap: clamp(3rem, 7vw, 7rem);
+  grid-template-columns: max-content 8px minmax(0, 1fr);
+  column-gap: clamp(2.75rem, 4.5vw, 5rem);
   align-items: stretch;
 }
 
-/* The rule is now its own grid column inside the kicker, so it cannot overlap copy. */
-.history-kicker {
-  display: grid;
-  grid-template-columns: minmax(0, auto) 8px;
-  column-gap: clamp(1.5rem, 3vw, 3rem);
-  align-items: stretch;
-  min-width: 0;
+.history-year {
+  align-self: start;
   color: var(--green);
   font-size: clamp(5.2rem, 8vw, 8.6rem);
   font-weight: 900;
@@ -399,9 +391,7 @@ img {
   white-space: nowrap;
 }
 
-.history-kicker::after {
-  content: "";
-  display: block;
+.history-rule {
   width: 8px;
   min-height: 100%;
   background: var(--green);
@@ -539,33 +529,27 @@ img {
     max-width: 680px;
   }
 
-  .pillar-grid {
-    grid-template-columns: 1fr;
-  }
-
   .pillar {
-    min-height: auto;
-    padding: 2rem;
-    border-right: 0;
-    border-bottom: 2px solid var(--green);
+    grid-template-columns: 3.5rem 1fr;
+    gap: 1rem 1.5rem;
+    padding: 2rem 0;
   }
 
-  .pillar:last-child {
-    border-bottom: 0;
+  .pillar p {
+    grid-column: 2;
   }
 
-  .pillar h3 {
-    margin-top: 1.75rem;
-  }
-
-  .history-kicker {
+  .history-layout {
     grid-template-columns: 1fr;
     row-gap: 1.5rem;
+  }
+
+  .history-year {
     font-size: clamp(5rem, 17vw, 8rem);
     white-space: normal;
   }
 
-  .history-kicker::after {
+  .history-rule {
     width: 100%;
     height: 8px;
     min-height: 8px;
@@ -663,11 +647,6 @@ img {
     background: #174820;
   }
 
-  .pillar-grid,
-  .pillar {
-    background: #101511;
-  }
-
   .pillar h3,
   .pillar-number {
     color: #9bd5a4;
@@ -677,11 +656,11 @@ img {
     background: #171d18;
   }
 
-  .history-kicker {
+  .history-year {
     color: #9bd5a4;
   }
 
-  .history-kicker::after {
+  .history-rule {
     background: #9bd5a4;
   }
 
