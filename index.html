@@ -17,11 +17,23 @@
 <body>
     <a class="skip-link" href="#main">Skip to main content</a>
 
+    <!--
+    This invisible page-anchored marker determines when the fixed header
+    switches state. It never moves when the header itself changes height,
+    so there is no scroll/header feedback loop.
+  -->
+    <div class="header-sentinel" aria-hidden="true"></div>
+
     <header class="site-header" id="top">
         <div class="brand-masthead">
             <div class="brand-inner">
-                <a class="brand-logo-link" href="#top" aria-label="JUSSAA home">
-                    <img class="brand-logo" src="assets/logo_white_transparent.png"
+                <a class="brand-logo-link brand-logo-link--expanded" href="#top" aria-label="JUSSAA home">
+                    <img class="brand-logo brand-logo--expanded" src="assets/logo_white_transparent.png"
+                        alt="The Junior & Senior School Alumni Association logo">
+                </a>
+
+                <a class="brand-logo-link brand-logo-link--compact" href="#top" aria-label="JUSSAA home">
+                    <img class="brand-logo brand-logo--compact" src="assets/logo_white_transparent.png"
                         alt="The Junior & Senior School Alumni Association logo">
                 </a>
             </div>
@@ -44,6 +56,7 @@
             </nav>
         </div>
     </header>
+
     <div class="site-header-spacer" aria-hidden="true"></div>
 
     <main id="main">
@@ -186,101 +199,15 @@
 
     <script>
         const header = document.querySelector('.site-header');
-        const spacer = document.querySelector('.site-header-spacer');
+        const sentinel = document.querySelector('.header-sentinel');
 
-        /*
-          Compact after the user has clearly left the top of the page.
-          Once compact, stay compact until the page is genuinely back at the top.
+        // Set the restored-scroll state before transitions are enabled.
+        header.classList.toggle('is-compact', window.scrollY > 140);
 
-          The near-zero expand threshold is intentional: touch/inertial scrolling
-          can move through the first 100–200px very quickly, and repeatedly
-          expanding the large masthead in that zone feels unstable.
-        */
-        const compactAt = 140;
-        const expandAt = 2;
-
-        let isCompact = window.scrollY >= compactAt;
-        let headerTicking = false;
-        let lastMeasuredWidth = document.documentElement.clientWidth;
-
-        const applyHeaderState = () => {
-            const y = Math.max(
-                0,
-                window.pageYOffset ||
-                document.documentElement.scrollTop ||
-                document.body.scrollTop ||
-                0
-            );
-
-            if (!isCompact && y >= compactAt) {
-                isCompact = true;
-            } else if (isCompact && y <= expandAt) {
-                isCompact = false;
-            }
-
-            header.classList.toggle('is-compact', isCompact);
-            headerTicking = false;
-        };
-
-        /*
-          The fixed header needs a spacer equal to its EXPANDED height.
-
-          Mobile Safari changes viewport height while its browser chrome
-          collapses/expands during touch scrolling and can fire resize events
-          while the user is still scrolling. Re-measuring on those height-only
-          resizes causes visible header state changes.
-
-          Therefore we only re-measure when the layout WIDTH actually changes
-          (for example rotation, split-screen resizing, or a desktop resize).
-        */
-        const measureExpandedHeader = () => {
-            const restoreCompact = header.classList.contains('is-compact');
-
-            header.classList.add('is-measuring');
-            header.classList.remove('is-compact');
-
-            spacer.style.height = `${header.offsetHeight}px`;
-
-            if (restoreCompact) {
-                header.classList.add('is-compact');
-            }
-
-            header.classList.remove('is-measuring');
-            lastMeasuredWidth = document.documentElement.clientWidth;
-        };
-
-        window.addEventListener('scroll', () => {
-            if (!headerTicking) {
-                window.requestAnimationFrame(applyHeaderState);
-                headerTicking = true;
-            }
-        }, { passive: true });
-
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            const currentWidth = document.documentElement.clientWidth;
-
-            // Ignore Safari's address-bar / toolbar height changes.
-            if (Math.abs(currentWidth - lastMeasuredWidth) < 2) {
-                return;
-            }
-
-            window.clearTimeout(resizeTimer);
-            resizeTimer = window.setTimeout(() => {
-                measureExpandedHeader();
-                applyHeaderState();
-            }, 120);
-        }, { passive: true });
-
-        window.addEventListener('orientationchange', () => {
-            window.setTimeout(() => {
-                measureExpandedHeader();
-                applyHeaderState();
-            }, 250);
-        });
-
-        measureExpandedHeader();
-        applyHeaderState();
+        new IntersectionObserver(([entry]) => {
+            header.classList.toggle('is-compact', !entry.isIntersecting);
+            header.classList.add('is-ready');
+        }).observe(sentinel);
     </script>
 </body>
 

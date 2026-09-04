@@ -58,10 +58,34 @@ img {
   top: 1rem;
 }
 
-/* Header: full masthead at the top, compact fixed header after scrolling.
-   A separate spacer preserves the expanded header's document footprint, so
-   changing header height never changes scrollY. */
+/* Header ---------------------------------------------------------------
+
+   The header remains fixed so its visual height can change without moving the
+   page underneath it. The spacer below reserves the expanded footprint using
+   CSS only; no runtime geometry measurement is needed.
+
+   Header state comes from an IntersectionObserver watching .header-sentinel.
+   There are two copies of the real logo asset: one permanently centred for the
+   expanded masthead and one permanently aligned to the content leading edge
+   for the compact masthead. They cross-fade quickly rather than trying to
+   morph one element between two coordinate systems.
+*/
+.header-sentinel {
+  position: absolute;
+  top: 140px;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+  visibility: hidden;
+}
+
 .site-header {
+  --masthead-expanded: 270px;
+  --masthead-compact: 64px;
+  --nav-height: 68px;
+  --accent-height: 9px;
+
   position: fixed;
   top: 0;
   left: 0;
@@ -73,17 +97,39 @@ img {
 
 .site-header-spacer {
   width: 100%;
+  height: calc(
+    var(--masthead-expanded, 270px) +
+    var(--accent-height, 9px) +
+    var(--nav-height, 68px)
+  );
+}
+
+/*
+  The spacer is outside .site-header, so give it the same responsive values
+  directly. These are intentionally fixed values; the nav layouts below are
+  sized to match them.
+*/
+@media (min-width: 851px) {
+  .site-header-spacer {
+    height: 347px;
+  }
 }
 
 .brand-masthead {
-  --masthead-height: 270px;
-  --logo-height: 220px;
   position: relative;
-  height: var(--masthead-height);
+  height: var(--masthead-expanded);
   padding: 2.5rem 1rem;
   background: var(--green);
   overflow: hidden;
+}
+
+.site-header.is-ready .brand-masthead {
   transition: height 180ms ease, padding 180ms ease;
+}
+
+.site-header.is-compact .brand-masthead {
+  height: var(--masthead-compact);
+  padding: .4rem 1rem;
 }
 
 .brand-inner {
@@ -96,48 +142,75 @@ img {
 .brand-logo-link {
   position: absolute;
   top: 50%;
-  left: 50%;
   display: block;
   line-height: 0;
-  transform: translate(-50%, -50%);
-  transition: left 180ms ease, transform 180ms ease;
 }
 
-.brand-masthead,
-.brand-logo-link,
-.brand-logo {
-  will-change: height, transform;
+/* Expanded logo: always physically centred. */
+.brand-logo-link--expanded {
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Compact logo: always physically aligned to the content leading edge. */
+.brand-logo-link--compact {
+  left: 0;
+  transform: translateY(-50%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+/*
+  Quick cross-fade. The outgoing image starts fading immediately; the incoming
+  image waits a few milliseconds so the state change reads as one restrained
+  transition rather than a hard replacement.
+*/
+.site-header.is-ready .brand-logo-link--expanded,
+.site-header.is-ready .brand-logo-link--compact {
+  transition:
+    opacity 90ms ease,
+    visibility 0s linear 90ms;
+}
+
+.site-header.is-ready .brand-logo-link--expanded {
+  transition-delay: 35ms, 125ms;
+}
+
+.site-header.is-ready.is-compact .brand-logo-link--expanded {
+  opacity: 0;
+  visibility: hidden;
+  transition-delay: 0ms, 90ms;
+}
+
+.site-header.is-ready.is-compact .brand-logo-link--compact {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 35ms, 0ms;
+}
+
+/* Reverse direction: compact logo disappears first, then expanded fades in. */
+.site-header.is-ready:not(.is-compact) .brand-logo-link--compact {
+  opacity: 0;
+  visibility: hidden;
+  transition-delay: 0ms, 90ms;
 }
 
 .brand-logo {
   display: block;
   width: auto;
-  height: var(--logo-height);
-  max-width: min(290px, 60vw);
   object-fit: contain;
-  transition: height 180ms ease, max-width 180ms ease;
 }
 
-.site-header.is-compact .brand-masthead {
-  --masthead-height: 64px;
-  --logo-height: 50px;
-  padding: .4rem 1rem;
+.brand-logo--expanded {
+  height: 220px;
+  max-width: min(290px, 60vw);
 }
 
-.site-header.is-compact .brand-logo-link {
-  left: 0;
-  transform: translate(0, -50%);
-}
-
-.site-header.is-compact .brand-logo {
+.brand-logo--compact {
+  height: 50px;
   max-width: 132px;
-}
-
-/* Used only while JavaScript measures the expanded header after resize. */
-.site-header.is-measuring .brand-masthead,
-.site-header.is-measuring .brand-logo-link,
-.site-header.is-measuring .brand-logo {
-  transition: none !important;
 }
 
 .accent-bar {
@@ -153,7 +226,7 @@ img {
 
 .nav-wrap {
   width: min(calc(100% - 2rem), var(--max));
-  min-height: 68px;
+  height: 68px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -557,25 +630,28 @@ img {
 }
 
 @media (max-width: 850px) {
-  .brand-masthead {
-    --masthead-height: 220px;
-    --logo-height: 175px;
+  .site-header {
+    --masthead-expanded: 220px;
+    --masthead-compact: 60px;
+    --nav-height: 82px;
   }
 
-  .brand-logo {
+  .site-header-spacer {
+    height: 311px;
+  }
+
+  .brand-logo--expanded {
+    height: 175px;
     max-width: min(245px, 68vw);
   }
 
-  .site-header.is-compact .brand-masthead {
-    --masthead-height: 60px;
-    --logo-height: 46px;
-  }
-
-  .site-header.is-compact .brand-logo {
+  .brand-logo--compact {
+    height: 46px;
     max-width: 122px;
   }
 
   .nav-wrap {
+    height: 82px;
     padding: 1rem 0;
     align-items: flex-start;
   }
@@ -637,28 +713,37 @@ img {
     scroll-padding-top: 180px;
   }
 
+  .site-header {
+    --masthead-expanded: 190px;
+    --masthead-compact: 56px;
+    --nav-height: 112px;
+  }
+
+  .site-header-spacer {
+    height: 311px;
+  }
+
   .brand-masthead {
-    --masthead-height: 190px;
-    --logo-height: 150px;
     padding: 2rem 1rem;
   }
 
-  .brand-logo {
-    max-width: min(220px, 68vw);
-  }
-
   .site-header.is-compact .brand-masthead {
-    --masthead-height: 56px;
-    --logo-height: 42px;
     padding: .35rem 1rem;
   }
 
-  .site-header.is-compact .brand-logo {
+  .brand-logo--expanded {
+    height: 150px;
+    max-width: min(220px, 68vw);
+  }
+
+  .brand-logo--compact {
+    height: 42px;
     max-width: 112px;
   }
 
   .nav-wrap {
     display: block;
+    height: 112px;
   }
 
   .site-nav {
@@ -700,9 +785,9 @@ img {
   }
 
   .brand-masthead,
-  .brand-logo-link,
-  .brand-logo {
-    transition: none;
+  .brand-logo-link--expanded,
+  .brand-logo-link--compact {
+    transition: none !important;
   }
 }
 
