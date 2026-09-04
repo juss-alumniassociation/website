@@ -19,6 +19,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 160px;
 }
 
 body {
@@ -46,7 +47,7 @@ img {
   position: absolute;
   left: 1rem;
   top: -5rem;
-  z-index: 1000;
+  z-index: 1100;
   padding: .65rem 1rem;
   background: var(--white);
   color: var(--green-deep);
@@ -57,29 +58,80 @@ img {
   top: 1rem;
 }
 
-/* Header: deliberately mirrors the newsletter's thick green masthead. */
+/* Header: full masthead at the top, compact fixed header after scrolling.
+   A separate spacer preserves the expanded header's document footprint, so
+   changing header height never changes scrollY. */
 .site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   background: var(--white);
   border-bottom: 1px solid var(--line);
 }
 
+.site-header-spacer {
+  width: 100%;
+}
+
 .brand-masthead {
+  position: relative;
   min-height: 270px;
   padding: 2.5rem 1rem;
-  display: grid;
-  place-items: center;
   background: var(--green);
+  overflow: hidden;
+  transition: min-height 180ms ease, padding 180ms ease;
+}
+
+.brand-inner {
+  position: absolute;
+  inset: 0;
+  width: min(calc(100% - 2rem), var(--max));
+  margin-inline: auto;
 }
 
 .brand-logo-link {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: block;
   line-height: 0;
+  transform: translate(-50%, -50%);
+  transition: left 180ms ease, transform 180ms ease;
 }
 
 .brand-logo {
   display: block;
-  width: min(290px, 60vw);
+  width: auto;
   height: auto;
+  max-width: min(290px, 60vw);
+  max-height: 220px;
+  transition: width 180ms ease, height 180ms ease,
+              max-width 180ms ease, max-height 180ms ease;
+}
+
+.site-header.is-compact .brand-masthead {
+  min-height: 64px;
+  padding: .4rem 1rem;
+}
+
+.site-header.is-compact .brand-logo-link {
+  left: 0;
+  transform: translate(0, -50%);
+}
+
+.site-header.is-compact .brand-logo {
+  width: auto;
+  height: 50px;
+  max-width: 132px;
+}
+
+/* Used only while JavaScript measures the expanded header after resize. */
+.site-header.is-measuring .brand-masthead,
+.site-header.is-measuring .brand-logo-link,
+.site-header.is-measuring .brand-logo {
+  transition: none !important;
 }
 
 .accent-bar {
@@ -504,7 +556,20 @@ img {
   }
 
   .brand-logo {
-    width: min(245px, 68vw);
+    width: auto;
+    height: auto;
+    max-width: min(245px, 68vw);
+    max-height: 175px;
+  }
+
+  .site-header.is-compact .brand-masthead {
+    min-height: 60px;
+  }
+
+  .site-header.is-compact .brand-logo {
+    width: auto;
+    height: 46px;
+    max-width: 122px;
   }
 
   .nav-wrap {
@@ -565,13 +630,31 @@ img {
 }
 
 @media (max-width: 600px) {
+  html {
+    scroll-padding-top: 180px;
+  }
+
   .brand-masthead {
     min-height: 190px;
     padding: 2rem 1rem;
   }
 
   .brand-logo {
-    width: min(220px, 68vw);
+    width: auto;
+    height: auto;
+    max-width: min(220px, 68vw);
+    max-height: 150px;
+  }
+
+  .site-header.is-compact .brand-masthead {
+    min-height: 56px;
+    padding: .35rem 1rem;
+  }
+
+  .site-header.is-compact .brand-logo {
+    width: auto;
+    height: 42px;
+    max-width: 112px;
   }
 
   .nav-wrap {
@@ -614,6 +697,12 @@ img {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .brand-masthead,
+  .brand-logo-link,
+  .brand-logo {
+    transition: none;
   }
 }
 

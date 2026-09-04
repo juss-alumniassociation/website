@@ -16,10 +16,12 @@
 
     <header class="site-header" id="top">
         <div class="brand-masthead">
-            <a class="brand-logo-link" href="#top" aria-label="JUSSAA home">
-                <img class="brand-logo" src="assets/logo_white_transparent.png"
-                    alt="The Junior & Senior School Alumni Association logo">
-            </a>
+            <div class="brand-inner">
+                <a class="brand-logo-link" href="#top" aria-label="JUSSAA home">
+                    <img class="brand-logo" src="assets/logo_white_transparent.png"
+                        alt="The Junior & Senior School Alumni Association logo">
+                </a>
+            </div>
         </div>
 
         <div class="accent-bar" aria-hidden="true">
@@ -39,6 +41,7 @@
             </nav>
         </div>
     </header>
+    <div class="site-header-spacer" aria-hidden="true"></div>
 
     <main id="main">
         <section class="hero">
@@ -179,7 +182,62 @@
     </footer>
 
     <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
+        const header = document.querySelector('.site-header');
+        const spacer = document.querySelector('.site-header-spacer');
+
+        // Two different thresholds create hysteresis: once compact, the header
+        // does not expand again until the user is close to the top of the page.
+        // This prevents state-chatter around a single scroll threshold.
+        const compactAt = 160;
+        const expandAt = 48;
+
+        let isCompact = window.scrollY >= compactAt;
+        let headerTicking = false;
+
+        const applyHeaderState = () => {
+            const y = window.scrollY;
+
+            if (!isCompact && y >= compactAt) {
+                isCompact = true;
+            } else if (isCompact && y <= expandAt) {
+                isCompact = false;
+            }
+
+            header.classList.toggle('is-compact', isCompact);
+            headerTicking = false;
+        };
+
+        // The header is fixed rather than participating in document layout.
+        // Reserve its expanded height once so changing to the compact state does
+        // not alter scrollY and cannot trigger a compact/expanded feedback loop.
+        const measureExpandedHeader = () => {
+            const restoreCompact = header.classList.contains('is-compact');
+            header.classList.add('is-measuring');
+            header.classList.remove('is-compact');
+
+            spacer.style.height = `${header.offsetHeight}px`;
+
+            if (restoreCompact) {
+                header.classList.add('is-compact');
+            }
+            header.classList.remove('is-measuring');
+        };
+
+        window.addEventListener('scroll', () => {
+            if (!headerTicking) {
+                window.requestAnimationFrame(applyHeaderState);
+                headerTicking = true;
+            }
+        }, { passive: true });
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            window.clearTimeout(resizeTimer);
+            resizeTimer = window.setTimeout(measureExpandedHeader, 120);
+        });
+
+        measureExpandedHeader();
+        applyHeaderState();
     </script>
 </body>
 
