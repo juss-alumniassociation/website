@@ -7,6 +7,9 @@
     <meta name="description"
         content="The Junior & Senior School Alumni Association (JUSSAA): connecting alumni, supporting the school community, and building opportunities for future generations.">
     <meta name="theme-color" content="#21632C">
+    <meta name="theme-color" content="#21632C" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#174820" media="(prefers-color-scheme: dark)">
+    <meta name="color-scheme" content="light dark">
     <title>JUSSAA | The Junior & Senior School Alumni Association</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -14,12 +17,26 @@
 <body>
     <a class="skip-link" href="#main">Skip to main content</a>
 
+    <!--
+    This invisible page-anchored marker determines when the fixed header
+    switches state. It never moves when the header itself changes height,
+    so there is no scroll/header feedback loop.
+  -->
+    <div class="header-sentinel" aria-hidden="true"></div>
+
     <header class="site-header" id="top">
         <div class="brand-masthead">
-            <a class="brand-logo-link" href="#top" aria-label="JUSSAA home">
-                <img class="brand-logo" src="assets/logo_white_transparent.png"
-                    alt="The Junior & Senior School Alumni Association logo">
-            </a>
+            <div class="brand-inner">
+                <a class="brand-logo-link brand-logo-link--expanded" href="#top" aria-label="JUSSAA home">
+                    <img class="brand-logo brand-logo--expanded" src="assets/logo_white_transparent.png"
+                        alt="The Junior & Senior School Alumni Association logo">
+                </a>
+
+                <a class="brand-logo-link brand-logo-link--compact" href="#top" aria-label="JUSSAA home">
+                    <img class="brand-logo brand-logo--compact" src="assets/logo_white_transparent.png"
+                        alt="The Junior & Senior School Alumni Association logo">
+                </a>
+            </div>
         </div>
 
         <div class="accent-bar" aria-hidden="true">
@@ -39,6 +56,8 @@
             </nav>
         </div>
     </header>
+
+    <div class="site-header-spacer" aria-hidden="true"></div>
 
     <main id="main">
         <section class="hero">
@@ -180,6 +199,17 @@
 
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        const header = document.querySelector('.site-header');
+        const sentinel = document.querySelector('.header-sentinel');
+
+        // Set the restored-scroll state before transitions are enabled.
+        header.classList.toggle('is-compact', window.scrollY > 140);
+
+        new IntersectionObserver(([entry]) => {
+            header.classList.toggle('is-compact', !entry.isIntersecting);
+            header.classList.add('is-ready');
+        }).observe(sentinel);
     </script>
 </body>
 
