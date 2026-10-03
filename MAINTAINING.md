@@ -1,58 +1,93 @@
 # Maintaining website content
 
-This guide is for routine Association updates using a web browser. You do not need to learn Git or use a terminal.
+This guide is for routine Association updates in a web browser. You need a GitHub account with permission to edit the repository, but do not need Git, a terminal, YAML experience, or a local Jekyll installation.
 
-## What you need
-
-You need only:
-
-- a web browser;
-- a GitHub account with permission to edit this repository.
-
-Routine maintenance does not require Git installed locally, Ruby, Jekyll, Docker, VS Code, or command-line tools.
-
-## Make a simple edit
+## Make and save an edit
 
 1. Open the [JUSSAA website repository](https://github.com/juss-alumniassociation/website).
-2. Find and open the file you need. You can use the file list, or press `t` on the repository page to search filenames.
-3. Click the pencil-shaped **Edit** control. If GitHub offers **Edit in place** or asks you to create a branch, follow its on-screen choice; the wording can vary with your access.
-4. Make the small change. For homepage wording, edit only the words between the existing HTML tags; do not change the tags. For a data file, change only the relevant value and preserve the surrounding indentation and punctuation.
-5. A preview is not currently useful for the homepage HTML or YAML data files, so skip it for these edits. If GitHub offers a preview for a Markdown file in the future, it can help check how that text will look.
-6. Click **Commit changes**. If GitHub asks where to save, follow its suggested option. It may save directly or offer to create a review page called a pull request; if the choices are unclear, stop and contact the technical maintainer.
-7. GitHub calls saving a change a *commit*. For routine website maintenance, you only need to know that this records your edit in the repository.
-8. GitHub will run the website validation check for the saved change. The check reports whether the site can be built; it does not publish the site as part of this milestone.
+2. Find the file named in the task below. GitHub's file search (`t`) can help.
+3. Open it and choose the pencil **Edit** control.
+4. Make the content change described below. For Markdown pages, write ordinary text under the settings block. The lines between the two `---` markers contain settings; change their values, but leave field names and indentation intact.
+5. Choose **Commit changes** and follow GitHub's on-screen options. GitHub may save to a branch and offer a pull request; the change is not live just because it was saved. After saving, open the repository's **Actions** tab and wait for the validation check to finish. It can take a few minutes. If GitHub's save options or check result are unclear, contact the technical maintainer.
 
-## What you can currently edit safely
+## Add a News item
 
-These are the routine content and data locations that exist today:
+1. Choose **Add file** → **Create new file**. In the filename box, enter `_news/alumni-achievement.md` (use lowercase words and hyphens). GitHub creates the folder path as it saves the new file.
+3. Paste this at the top and replace the example values:
 
-- `index.html` contains the homepage wording. Edit only the text you are confident about; its surrounding HTML controls how it is displayed.
-- `_data/social.yml` contains the shared email address and social/contact destinations. Open the file, change only the value you need, and preserve indentation. Do not delete a key such as `email` or `facebook`; the website uses these names to find the values.
-- `_data/navigation.yml` contains the current homepage navigation labels and links. A simple existing label or link can be changed here. Keep each item's `title` and `url`, preserve indentation, and do not restructure the list casually. Expanded navigation is planned for a later milestone.
+```yaml
+---
+layout: news
+title: Alumni achievement
+date: 2026-10-03
+summary: A short description of the update.
+---
+```
 
-News, events, and other content collections do not exist yet. Instructions for them will be added when those features are introduced.
+4. Add an optional longer story below the second `---`. If the update is only a short listing, leave the body empty.
+5. Commit the new file. News appears in the News & Events page and the newest items appear on Home.
 
-## Files you should not normally edit
+## Edit or remove News
 
-These files and folders control how the website is built or displayed. Leave them to the technical maintainer unless you have been asked to work on the implementation:
+Open the item's `.md` file inside `_news`, choose the pencil, edit the title/date/summary/body, and commit. To remove an item, open its file and use GitHub's delete-file control, then commit. Ask the technical maintainer if you are unsure which item to remove.
 
-- `_layouts/` and `_includes/`
-- `assets/js/`
-- `styles.css`
-- `_config.yml`
-- `Gemfile` and `Gemfile.lock`
-- `.devcontainer/`
-- `.github/`
-- `scripts/`
+## Add or edit an Event
 
-## What if a GitHub check fails?
+1. Choose **Add file** → **Create new file**. In the filename box, enter `_events/fireworks-night.md` (use lowercase words and hyphens). GitHub creates the folder path as it saves the new file.
+2. Start with this settings block, replacing the sample details:
 
-Your edit has been saved in GitHub, but GitHub could not successfully validate/build the website. Open the failed check and read its message. Do not make random extra edits to try to fix it. If the cause is not clear, undo your change or contact the person currently responsible for technical maintenance. A failed check does not, by itself, tell you what is happening with the live website.
+```yaml
+---
+layout: event
+title: Fireworks Night
+date: 2026-11-06
+summary: Join us at the school birthday celebrations.
+location: The Junior & Senior School
+links:
+  - label: Facebook
+    url: https://example.com/event
+  - label: Registration
+    url: https://example.com/register
+---
+```
 
-## Undo a mistake
+3. The summary, location, links, and story below the settings block are optional. The title and date are required. Use a full date as `YYYY-MM-DD`.
+4. Commit the file. To edit an event, edit the values in its existing `_events` file and commit.
 
-If you have not saved yet, leave the edit screen without committing. If you already clicked **Commit changes**, open the affected file on GitHub and choose **History** to find the saved change. Open that change and use GitHub's **Revert** option if it is available. If GitHub does not offer Revert, or you are unsure which change to undo, stop and contact the technical maintainer rather than editing more files.
+Upcoming and past sections are calculated from the event date when the site is built. An event dated today or later appears under Upcoming; an earlier date appears under Past. You do not move the file between folders.
 
-## If you are unsure
+### Related links are optional
 
-If you are unsure, do not guess. Contact the person currently responsible for technical maintenance of the website.
+A `links:` block can contain any number of label and URL pairs, including links to any website or social platform. It can contain one link, several links, or none. Missing `links:` is valid. You may remove the entire block if there are no related links, or keep it empty as `links: []`. Do not remove the indentation from the nested `label` and `url` lines when editing a list.
+
+For example, add another pair with the same indentation:
+
+```yaml
+links:
+  - label: Facebook
+    url: https://example.com/event
+  - label: School event page
+    url: https://example.com/school-event
+  - label: Photos
+    url: https://example.com/photos
+```
+
+To remove all links, delete the `links:` line and all of its indented entries. The event remains valid.
+
+## Edit ordinary page copy
+
+Open `about.md`, `history.md`, `get-involved.md`, `support.md`, or `contact.md` in the repository root. Edit the ordinary text below the settings block. Do not change the `layout`, `title`, or `permalink` settings unless the technical maintainer asks you to.
+
+## Change navigation
+
+Open `_data/navigation.yml`. Change the text after `title:` to change a displayed label, or the path after `url:` to change its destination. Keep the six list entries, their indentation, and their `title` and `url` field names. Use the existing format, such as `/history/`.
+
+## Update contact or social information
+
+Open `_data/social.yml` and change only the value after the relevant name, such as `instagram:`. Keep the key and punctuation. Contact details are shared by pages, so do not copy these URLs into page files.
+
+## Files not normally edited for routine content
+
+Leave these to the technical maintainer: `_layouts/`, `_includes/`, `assets/`, `styles.css`, `_config.yml`, `Gemfile`, `Gemfile.lock`, `.devcontainer/`, `.github/`, and `scripts/`. Routine content belongs in page Markdown files, `_news/`, `_events/`, or the two `_data/` files described above.
+
+If a GitHub validation check fails after your edit, open the check's message and contact the technical maintainer instead of making random extra edits. If you need to undo a saved change, use the file's GitHub **History** and **Revert** action where available.

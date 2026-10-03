@@ -1,0 +1,16 @@
+{% assign matching_events = site.events | sort: 'date' %}
+{% assign found_events = false %}
+<ul class="content-list">
+{% for event in matching_events %}
+    {% assign event_day = event.date | date: '%Y-%m-%d' %}
+    {% assign today = site.time | date: '%Y-%m-%d' %}
+    {% if include.kind == 'upcoming' and event_day >= today %}
+        {% assign found_events = true %}
+        <li><h3><a href="{{ event.url | relative_url }}">{{ event.title }}</a></h3><p class="listing-meta">{{ event.date | date: '%B %-d, %Y' }}{% if event.location %} · {{ event.location }}{% endif %}</p>{% if event.summary %}<p>{{ event.summary }}</p>{% endif %}</li>
+    {% elsif include.kind == 'past' and event_day < today %}
+        {% assign found_events = true %}
+        <li><h3><a href="{{ event.url | relative_url }}">{{ event.title }}</a></h3><p class="listing-meta">{{ event.date | date: '%B %-d, %Y' }}{% if event.location %} · {{ event.location }}{% endif %}</p>{% if event.summary %}<p>{{ event.summary }}</p>{% endif %}</li>
+    {% endif %}
+{% endfor %}
+</ul>
+{% unless found_events %}<p class="empty-note">{% if include.kind == 'upcoming' %}There are no upcoming events listed at the moment. Please check back for future dates.{% else %}There are no past events listed yet.{% endif %}</p>{% endunless %}

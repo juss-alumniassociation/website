@@ -1,69 +1,55 @@
 # Technical contribution guide
 
-This guide covers implementation work such as layouts, styling, JavaScript, Jekyll configuration, and validation. Routine content updates should follow [MAINTAINING.md](MAINTAINING.md).
+Routine content changes are designed to be made in a browser. Follow [MAINTAINING.md](MAINTAINING.md) for page copy, News, Events, navigation and contact updates. The structures described there must remain editable through GitHub's browser interface without requiring terminal use for normal Association maintenance.
 
-## Repository architecture
+## Public information architecture
 
-- `index.html` is the homepage-specific content. Its front matter selects the default layout and expandable homepage header.
-- `_layouts/` contains page shells. `default.html` provides the shared document shell; `page.html` is a page layout that uses the default shell and selects compact header behavior.
-- `_includes/` contains shared pieces used by layouts, including the head, header, and footer.
-- `_data/` contains simple YAML intended for routine maintenance, such as navigation in `navigation.yml` and contact/social destinations in `social.yml`.
-- `assets/` contains static assets, including the logo images and `assets/js/site.js` for site behavior.
-- `styles.css` contains the site's styling.
-- `scripts/` contains the canonical local preview and validation commands.
-- `_config.yml` contains Jekyll site settings, including the production URL and base URL.
+The top-level destinations are Home (`/`), About (`/about/`), History (`/history/`), News & Events (`/news-events/`), Get Involved (`/get-involved/`), Support JUSSAA (`/support/`) and Contact (`/contact/`). Labels and destinations live in `_data/navigation.yml` and are rendered in desktop and mobile navigation from that source.
 
-Keep homepage content distinct from shared layout/includes, routine-maintenance data distinct from implementation code, and avoid moving routine edits into Liquid templates.
+## Layout and page content
 
-## Jekyll layout and header behavior
+`_layouts/default.html` provides the shared document shell, header and footer. `page.html` is the reusable interior layout: it selects the compact branded header and renders the page introduction and content. Ordinary pages use `layout: page`, with `title`, optional `label`, optional `description`, and a stable `permalink`. `label` is the small introduction text above the title. Omit either optional field when it is not needed; no blank placeholder is rendered.
 
-The `default` layout is the shared outer HTML shell. The `page` layout sets `layout: default` and `header_style: compact`. The homepage sets `layout: default` and `header_style: expandable` in `index.html`.
+`index.html` is the Home-only page and uses the expandable masthead. Shared pieces live in `_includes/`. Keep ordinary copy in Markdown pages and repeated content in collections rather than adding content to Liquid templates.
 
-The header include uses that setting for the expandable homepage masthead. Interior pages use compact-only behavior. Preserve this model in this milestone; do not redesign it as part of operational work.
+## News and Events collections
 
-## Development environment
+`_config.yml` explicitly configures the standard Jekyll `_news/` and `_events/` collections with output pages. Each collection item is a Markdown file with a front-matter block between `---` lines. The regular maintainer guide includes complete copyable examples.
 
-The repository's devcontainer is the preferred and canonical environment. It is intended to reduce platform differences across macOS, Windows, and Linux.
+News items use `layout: news` and require `title` and `date`. Optional fields are `summary` and `links`. The body is optional. Event items use `layout: event` and require `title` and `date`; optional fields are `summary`, `location` and `links`. Their Markdown body is optional too. Each item gets its own page at `/news/<filename>/` or `/events/<filename>/`.
 
-You generally need Git, Docker, VS Code or another devcontainer-capable editor, and Dev Containers support in that editor. For a first setup, clone `https://github.com/juss-alumniassociation/website.git` with Git, then open the cloned `website` folder in your editor. In VS Code, install the **Dev Containers** extension if needed, open the Command Palette, and choose **Dev Containers: Reopen in Container**. For another editor, use its equivalent command to open the project in its configured devcontainer. Wait for setup to finish before running commands. The devcontainer runs `bundle install` after creation and forwards port 4000.
+Both models use the same generic optional `links` list. Each entry has a human-readable `label` and a `url`; links can point to any kind of resource. The whole field may be omitted, set to `[]`, or contain any number of entries. Templates render no links section when the list is absent or empty. If adding an optional field to a model, update every place that displays that model (item layout, collection listing, and any Home preview), and document the field and a copyable example in `MAINTAINING.md` before exposing it as a routine-editing task. Preserve simple field names and values that can be edited in GitHub's browser. Keep the field optional and make omitted values render cleanly.
 
-Native Jekyll setup can work for experienced contributors, but it is an optional expert workflow and is not the supported baseline. Jekyll is the site generator; Liquid is the template language used by the layouts and includes. Front matter is the small YAML settings block at the top of a page such as `index.html`.
+The News & Events page renders Latest News, Upcoming Events, Past Events and Follow JUSSAA. It handles empty collections with explanatory text. Upcoming and Past are derived at build time by comparing each event's date with the current date; events are not manually moved. Home previews recent News and Upcoming Events and links to the full hub.
 
-## Local preview
+## Navigation behavior
 
-From the repository root in the devcontainer, run:
+The header markup and responsive menu are in `_includes/header.html`; styles, including the native mobile `<details>` menu, are in `styles.css`. Mobile navigation has no JavaScript state. `assets/js/site.js` handles the Home expandable/compact header behavior and footer year only. Keep the menu links data-driven from `_data/navigation.yml`.
+
+## Development and validation
+
+The repository devcontainer is the supported local environment. Open the repository in VS Code, choose **Dev Containers: Reopen in Container** from the Command Palette, and wait for container setup to finish. From the repository root inside the container run:
 
 ```sh
 ./scripts/serve.sh
 ```
 
-Jekyll starts a local server on port 4000. The forwarded port should open in a browser; otherwise open the forwarded port shown by your editor. Stop the server with `Ctrl+C` in its terminal.
+Open port 4000 from the editor's **Ports** panel or forwarded-port notification to preview. Stop the server with `Ctrl+C` in its terminal.
 
-## Local validation
-
-Run the canonical validation command from the repository root:
+Run the canonical validation command before submitting technical changes:
 
 ```sh
 ./scripts/check.sh
 ```
 
-It builds the site with strict front matter checking. Use this command locally and in CI so both environments perform the same repository validation.
+GitHub Actions runs the same script on pushes and pull requests. Do not bypass or replace it.
 
-## Branches and pull requests
+## Repository map
 
-For technical implementation changes, create a branch for the work, make focused changes, run `./scripts/check.sh`, and open a pull request for review. Keep the pull request scoped to one change and describe what changed and how you validated it. This development workflow is not required for routine browser-only content maintenance.
-
-## Production URL assumptions
-
-`_config.yml` sets `url: "https://jussaa.org"` and `baseurl: ""`. Authored site structure and links should work at the domain root and should not assume the site lives under `/website/`.
-
-## Maintainability rules
-
-- Put routine editable content in obvious content or data files.
-- Routine maintainers should not need to edit Liquid templates.
-- Give each fact one obvious editing location where practical; do not scatter the same URL or value across templates.
-- Keep social/contact destinations in their appropriate `_data/` file rather than copying them into multiple HTML includes.
-- Prefer standard Jekyll, Liquid, simple YAML, simple Markdown, plain HTML/CSS/JavaScript, and repository-local code.
-- Avoid custom Ruby plugins, unnecessary dependencies or JavaScript frameworks, Jekyll theme gems, content-management abstractions that normal maintainers cannot understand, and build-time magic.
-- Do not package this site's shell as a Jekyll theme.
-- Future features should preserve browser-only routine maintenance where practical.
+- `_config.yml`: Jekyll settings and collection configuration.
+- `_data/navigation.yml`, `_data/social.yml`: shared navigation and contact destinations.
+- `_layouts/`, `_includes/`: shared presentation and Liquid templates.
+- `_news/`, `_events/`: routine repeatable content.
+- Root Markdown pages: ordinary public page content.
+- `styles.css`, `assets/js/`, `assets/`: visual system, browser behavior and static assets.
+- `scripts/`: local preview and canonical validation commands.

@@ -2,4 +2,15 @@
 layout: default
 header_style: compact
 ---
-{{ content }}
+<div class="interior-page">
+    <div class="accent-bar" aria-hidden="true">
+        <span class="accent accent-green"></span><span class="accent accent-red"></span>
+        <span class="accent accent-yellow"></span><span class="accent accent-navy"></span>
+    </div>
+    <header class="page-intro content-width">
+        {% if page.label %}<p class="eyebrow">{{ page.label }}</p>{% endif %}
+        <h1>{{ page.title }}</h1>
+        {% if page.description %}<p class="page-description">{{ page.description }}</p>{% endif %}
+    </header>
+    <div class="page-content content-width">{{ content }}</div>
+</div>

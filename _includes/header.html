@@ -30,9 +30,17 @@
         <a class="wordmark" href="{% if page.url == '/' %}#top{% else %}{{ '/' | relative_url }}#top{% endif %}" aria-label="JUSSAA home">JUSSAA</a>
         <nav class="site-nav" aria-label="Primary navigation">
             {% for item in site.data.navigation %}
-            <a href="{% if page.url == '/' %}{{ item.url }}{% else %}{{ '/' | relative_url }}{{ item.url }}{% endif %}">{{ item.title }}</a>
+            <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
             {% endfor %}
         </nav>
+        <details class="mobile-menu">
+            <summary aria-label="Open primary navigation">Menu</summary>
+            <nav class="mobile-nav" aria-label="Mobile primary navigation">
+                {% for item in site.data.navigation %}
+                <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+                {% endfor %}
+            </nav>
+        </details>
     </div>
 </header>
 {% if page.header_style == 'expandable' %}

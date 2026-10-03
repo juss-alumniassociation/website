@@ -1,8 +1,12 @@
 - title: About
-  url: "#about"
-- title: Get involved
-  url: "#connect"
-- title: Our story
-  url: "#history"
+  url: /about/
+- title: History
+  url: /history/
+- title: News & Events
+  url: /news-events/
+- title: Get Involved
+  url: /get-involved/
+- title: Support JUSSAA
+  url: /support/
 - title: Contact
-  url: "#contact"
+  url: /contact/

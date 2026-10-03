@@ -6,6 +6,14 @@ baseurl: ""
 
 markdown: kramdown
 
+collections:
+  news:
+    output: true
+    permalink: /news/:name/
+  events:
+    output: true
+    permalink: /events/:name/
+
 exclude:
   - .devcontainer
   - vendor

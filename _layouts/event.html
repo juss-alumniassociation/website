@@ -1,0 +1,9 @@
+---
+layout: page
+---
+<article class="collection-entry event-entry">
+    <p class="listing-meta">{{ page.date | date: '%B %-d, %Y' }}{% if page.location %} · {{ page.location }}{% endif %}</p>
+    {% if page.summary %}<p class="entry-summary">{{ page.summary }}</p>{% endif %}
+    {{ content }}
+    {% include related-links.html links=page.links %}
+</article>

@@ -1,0 +1,8 @@
+{% assign latest_news = site.news | sort: 'date' | reverse %}
+{% if latest_news.size > 0 %}
+<ul class="content-list">
+{% for item in latest_news limit: include.limit %}
+    <li><h3><a href="{{ item.url | relative_url }}">{{ item.title }}</a></h3><p class="listing-meta">{{ item.date | date: '%B %-d, %Y' }}</p>{% if item.summary %}<p>{{ item.summary }}</p>{% endif %}</li>
+{% endfor %}
+</ul>
+{% else %}<p class="empty-note">There is no news to share at the moment. Check back soon.</p>{% endif %}

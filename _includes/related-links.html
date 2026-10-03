@@ -1,0 +1,7 @@
+{% if include.links and include.links.size > 0 %}
+<ul class="related-links">
+    {% for link in include.links %}
+    <li><a href="{{ link.url }}">{{ link.label }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
