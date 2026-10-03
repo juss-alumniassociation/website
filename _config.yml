@@ -8,6 +8,7 @@ markdown: kramdown
 
 exclude:
   - .devcontainer
+  - vendor
   - scripts
   - README.md
   - MAINTAINING.md
