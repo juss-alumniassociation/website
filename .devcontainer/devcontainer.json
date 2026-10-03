@@ -1,0 +1,32 @@
+{
+  "name": "JUSSAA Website",
+
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+
+  "features": {
+    "ghcr.io/devcontainers/features/ruby:2": {
+      "version": "3.1"
+    }
+  },
+
+  "forwardPorts": [4000],
+
+  "portsAttributes": {
+    "4000": {
+      "label": "Jekyll preview",
+      "onAutoForward": "openBrowser"
+    }
+  },
+
+  "postCreateCommand": "bundle install",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "shopify.ruby-lsp"
+      ]
+    }
+  },
+
+  "remoteUser": "vscode"
+}
