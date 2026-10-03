@@ -1,66 +1,8 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description"
-        content="The Junior & Senior School Alumni Association (JUSSAA): connecting alumni, supporting the school community, and building opportunities for future generations.">
-    <meta name="theme-color" content="#21632C">
-    <meta name="theme-color" content="#21632C" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#174820" media="(prefers-color-scheme: dark)">
-    <meta name="color-scheme" content="light dark">
-    <title>JUSSAA | The Junior & Senior School Alumni Association</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-
-<body>
-    <a class="skip-link" href="#main">Skip to main content</a>
-
-    <!--
-    This invisible page-anchored marker determines when the fixed header
-    switches state. It never moves when the header itself changes height,
-    so there is no scroll/header feedback loop.
-  -->
-    <div class="header-sentinel" aria-hidden="true"></div>
-
-    <header class="site-header" id="top">
-        <div class="brand-masthead">
-            <div class="brand-inner">
-                <a class="brand-logo-link brand-logo-link--expanded" href="#top" aria-label="JUSSAA home">
-                    <img class="brand-logo brand-logo--expanded" src="assets/logo_white_transparent.png"
-                        alt="The Junior & Senior School Alumni Association logo">
-                </a>
-
-                <a class="brand-logo-link brand-logo-link--compact" href="#top" aria-label="JUSSAA home">
-                    <img class="brand-logo brand-logo--compact" src="assets/logo_white_transparent.png"
-                        alt="The Junior & Senior School Alumni Association logo">
-                </a>
-            </div>
-        </div>
-
-        <div class="accent-bar" aria-hidden="true">
-            <span class="accent accent-green"></span>
-            <span class="accent accent-red"></span>
-            <span class="accent accent-yellow"></span>
-            <span class="accent accent-navy"></span>
-        </div>
-
-        <div class="nav-wrap">
-            <a class="wordmark" href="#top" aria-label="JUSSAA home">JUSSAA</a>
-            <nav class="site-nav" aria-label="Primary navigation">
-                <a href="#about">About</a>
-                <a href="#connect">Get involved</a>
-                <a href="#history">Our story</a>
-                <a href="#contact">Contact</a>
-            </nav>
-        </div>
-    </header>
-
-    <div class="site-header-spacer" aria-hidden="true"></div>
-
-    <main id="main">
-        <section class="hero">
+---
+layout: default
+header_style: expandable
+---
+<section class="hero">
             <div class="hero-inner">
                 <div class="hero-copy">
                     <p class="eyebrow">The Junior &amp; Senior School Alumni Association</p>
@@ -68,7 +10,7 @@
                     <p class="hero-lede">A home for alumni, graduates and friends of the school to reconnect, contribute
                         and remain part of a community that continues long after graduation.</p>
                     <div class="hero-actions">
-                        <a class="button button-primary" href="mailto:alumni@tjss.ac.cy">Contact JUSSAA</a>
+                        <a class="button button-primary" href="mailto:{{ site.data.social.email }}">Contact JUSSAA</a>
                         <a class="button button-secondary"
                             href="https://www.tjss.ac.cy/page/?pid=212&amp;title=Alumni+Association+Committee">Meet the
                             committee</a>
@@ -136,7 +78,7 @@
 
                 <div class="section-cta involvement-cta">
                     <p>Want to help shape the next chapter of JUSSAA?</p>
-                    <a class="text-link" href="mailto:alumni@tjss.ac.cy">Start a conversation <span
+                    <a class="text-link" href="mailto:{{ site.data.social.email }}">Start a conversation <span
                             aria-hidden="true">→</span></a>
                 </div>
             </div>
@@ -168,49 +110,12 @@
                         to get involved.</p>
                 </div>
                 <div class="contact-links" aria-label="JUSSAA contact links">
-                    <a href="mailto:alumni@tjss.ac.cy">alumni@tjss.ac.cy</a>
-                    <a href="https://tjss.jussaa.org/">JUSSAA Home</a>
-                    <a href="https://www.facebook.com/jussaapage">Facebook</a>
-                    <a href="https://www.facebook.com/groups/JUSSA/">Facebook Group</a>
-                    <a href="https://www.instagram.com/junior_senior_school_alumni/">Instagram</a>
-                    <a href="https://www.linkedin.com/company/jussaa/">LinkedIn</a>
+                    <a href="mailto:{{ site.data.social.email }}">alumni@tjss.ac.cy</a>
+                    <a href="{{ site.data.social.home }}">JUSSAA Home</a>
+                    <a href="{{ site.data.social.facebook }}">Facebook</a>
+                    <a href="{{ site.data.social.facebook_group }}">Facebook Group</a>
+                    <a href="{{ site.data.social.instagram }}">Instagram</a>
+                    <a href="{{ site.data.social.linkedin }}">LinkedIn</a>
                 </div>
             </div>
         </section>
-    </main>
-
-    <footer class="site-footer">
-        <div class="footer-main">
-            <div>
-                <strong>JUSSAA</strong>
-                <p>The Junior &amp; Senior School Alumni Association</p>
-            </div>
-            <div class="footer-links">
-                <a href="http://www.thejuniorandseniorschool.com/">The Junior &amp; Senior School</a>
-                <a href="https://www.tjss.ac.cy/page/?pid=212&amp;title=Alumni+Association+Committee">Alumni Association
-                    Committee</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <span>© <span id="year"></span> JUSSAA</span>
-            <span>Sursum Corda</span>
-        </div>
-    </footer>
-
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-
-        const header = document.querySelector('.site-header');
-        const sentinel = document.querySelector('.header-sentinel');
-
-        // Set the restored-scroll state before transitions are enabled.
-        header.classList.toggle('is-compact', window.scrollY > 140);
-
-        new IntersectionObserver(([entry]) => {
-            header.classList.toggle('is-compact', !entry.isIntersecting);
-            header.classList.add('is-ready');
-        }).observe(sentinel);
-    </script>
-</body>
-
-</html>

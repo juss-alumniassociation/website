@@ -1,0 +1,40 @@
+{% if page.header_style == 'expandable' %}
+    <!-- This fixed sentinel controls the expandable homepage masthead. -->
+    <div class="header-sentinel" aria-hidden="true"></div>
+{% endif %}
+
+<header class="site-header{% unless page.header_style == 'expandable' %} site-header--compact{% endunless %}" id="top">
+    <div class="brand-masthead">
+        <div class="brand-inner">
+            {% if page.header_style == 'expandable' %}
+            <a class="brand-logo-link brand-logo-link--expanded" href="{% if page.url == '/' %}#top{% else %}{{ '/' | relative_url }}#top{% endif %}" aria-label="JUSSAA home">
+                <img class="brand-logo brand-logo--expanded" src="{{ '/assets/logo_white_transparent.png' | relative_url }}"
+                    alt="The Junior &amp; Senior School Alumni Association logo">
+            </a>
+            {% endif %}
+            <a class="brand-logo-link brand-logo-link--compact" href="{% if page.url == '/' %}#top{% else %}{{ '/' | relative_url }}#top{% endif %}" aria-label="JUSSAA home">
+                <img class="brand-logo brand-logo--compact" src="{{ '/assets/logo_white_transparent.png' | relative_url }}"
+                    alt="The Junior &amp; Senior School Alumni Association logo">
+            </a>
+        </div>
+    </div>
+
+    <div class="accent-bar" aria-hidden="true">
+        <span class="accent accent-green"></span>
+        <span class="accent accent-red"></span>
+        <span class="accent accent-yellow"></span>
+        <span class="accent accent-navy"></span>
+    </div>
+
+    <div class="nav-wrap">
+        <a class="wordmark" href="{% if page.url == '/' %}#top{% else %}{{ '/' | relative_url }}#top{% endif %}" aria-label="JUSSAA home">JUSSAA</a>
+        <nav class="site-nav" aria-label="Primary navigation">
+            {% for item in site.data.navigation %}
+            <a href="{% if page.url == '/' %}{{ item.url }}{% else %}{{ '/' | relative_url }}{{ item.url }}{% endif %}">{{ item.title }}</a>
+            {% endfor %}
+        </nav>
+    </div>
+</header>
+{% if page.header_style == 'expandable' %}
+<div class="site-header-spacer" aria-hidden="true"></div>
+{% endif %}

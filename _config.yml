@@ -1,12 +1,16 @@
 title: JUSSAA
 description: The Junior & Senior School Alumni Association
 
-url: "https://juss-alumniassociation.github.io"
+url: "https://jussaa.org"
 baseurl: ""
 
 markdown: kramdown
 
 exclude:
   - .devcontainer
+  - scripts
   - README.md
-  - EDITING.md
+  - MAINTAINING.md
+  - CONTRIBUTING.md
+  - Gemfile
+  - Gemfile.lock

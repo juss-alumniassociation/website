@@ -95,6 +95,17 @@ img {
   border-bottom: 1px solid var(--line);
 }
 
+/* Interior pages use the compact branded header without scroll behavior. */
+.site-header--compact .brand-masthead {
+  height: var(--masthead-compact);
+  padding: .4rem 1rem;
+}
+
+.site-header--compact .brand-logo-link--compact {
+  opacity: 1;
+  visibility: visible;
+}
+
 .site-header-spacer {
   width: 100%;
   height: calc(
@@ -728,6 +739,10 @@ img {
   }
 
   .site-header.is-compact .brand-masthead {
+    padding: .35rem 1rem;
+  }
+
+  .site-header--compact .brand-masthead {
     padding: .35rem 1rem;
   }
 
