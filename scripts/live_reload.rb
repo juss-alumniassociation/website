@@ -41,6 +41,12 @@ module PreviewLiveReload
   end
 
   module Reactor
+    def reload(pages)
+      # The watcher runs in another thread; WebSocket writes belong on the
+      # EventMachine reactor thread so the client receives the frame promptly.
+      EM.schedule { super(pages) }
+    end
+
     def handle_websockets_event(websocket)
       super
       # em-websocket already closes a client on protocol/application errors,

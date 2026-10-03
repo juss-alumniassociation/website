@@ -174,8 +174,8 @@ test('Codespaces uses the forwarded HTTPS hostname and external port 443', () =>
     JEKYLL_LIVERELOAD_PORT: '35730',
   };
   delete env.JEKYLL_LIVERELOAD_URL;
-  const script = execFileSync('bundle', ['exec', 'ruby', '-r', './scripts/live_reload', '-e',
-    'puts Jekyll::Commands::Serve::BodyProcessor.new("", {}).template.result'], { cwd: root, env, encoding: 'utf8' });
+  const script = execFileSync('bundle', ['exec', 'ruby', '-e',
+    'require "./scripts/live_reload"; puts Jekyll::Commands::Serve::BodyProcessor.new("", {}).template.result'], { cwd: root, env, encoding: 'utf8' });
   assert.match(script, /https:\/\/preview-test-35730\.app\.github\.dev\/livereload\.js\?snipver=1&amp;port=443/);
 });
 
@@ -215,7 +215,12 @@ for (const secure of [false, true]) {
     await closed;
 
     await writeFile(preview.index, html('after'));
-    await expect(page.locator('#marker')).toHaveText('after', { timeout: 15_000 });
+    try {
+      await expect(page.locator('#marker')).toHaveText('after', { timeout: 15_000 });
+    } catch (error) {
+      error.message += `\nPreview output:\n${preview.output()}`;
+      throw error;
+    }
     await page.waitForFunction(() => window.LiveReload?.connector?.protocol === 7);
     assert.equal(preview.server.exitCode, null, preview.output());
     assert.doesNotMatch(preview.output(), /terminated with exception|LiveReload experienced an error/);
