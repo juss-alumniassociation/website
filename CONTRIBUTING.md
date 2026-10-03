@@ -36,7 +36,11 @@ To preview the site manually, run:
 ./scripts/serve.sh
 ```
 
-Open port 4000 from the editor's **Ports** panel or forwarded-port notification to preview. Stop the server with `Ctrl+C` in its terminal.
+Open port 4000 from the editor's **Ports** panel or forwarded-port notification to preview. LiveReload is enabled by default; keep port 35729 forwarded too so the browser can receive updates. Both ports are configured in the devcontainer. Stop the server with `Ctrl+C` in its terminal.
+
+The preview launcher explicitly loads a compatibility fix for Jekyll's LiveReload connection handling. GitHub Pages disables local `_plugins`, so a fix placed there would never run. The launcher handles fragmented handshakes and closes invalid clients without stopping the server or other browser connections. Production builds use the ordinary Jekyll command.
+
+In Codespaces, the launcher selects the HTTPS URL for forwarded port 35729 automatically. For another HTTPS preview proxy, set `JEKYLL_LIVERELOAD_URL` to the browser-facing HTTP(S) origin for the LiveReload listener, for example `JEKYLL_LIVERELOAD_URL=https://reload.example.com ./scripts/serve.sh`. The proxy must terminate TLS and forward plain HTTP/WebSocket traffic to port 35729. `JEKYLL_LIVERELOAD_PORT` changes the internal listener port; forward that port if you change it.
 
 For every UI-affecting change, run both checks from the repository root:
 
@@ -46,6 +50,8 @@ For every UI-affecting change, run both checks from the repository root:
 ```
 
 `./scripts/check.sh` is the static Jekyll build check. `./scripts/test-ui.sh` runs Playwright in Chromium. Playwright starts Jekyll itself using the test configuration, waits for the site, and stops its managed server when the suite ends, so no separate preview terminal is needed. The test build uses a temporary `baseurl` and fixture News and Events collections to exercise generated links and optional collection fields without publishing test fixture content.
+
+For preview-server changes, also run `./scripts/test-live-reload.sh`. It starts isolated preview servers using the real launcher, sends malformed traffic and fragmented handshakes, and verifies that Chromium still reloads edited content and accepts new connections. It covers direct HTTP/WS and an HTTPS/WSS proxy that terminates TLS. Fixtures, test certificates and generated sites stay in temporary directories. CI runs this check alongside browser verification.
 
 The browser suite covers all seven public routes, desktop and mobile navigation, tablet breakpoint visibility, navigation destinations, baseurl-safe internal links, the Shopify destination, collection content/date grouping, loaded shell assets, and browser console/page errors. Update or add coverage in `tests/browser/` when changing rendered behavior. Run an individual test file while iterating with `./scripts/test-ui.sh tests/browser/navigation.spec.ts`.
 

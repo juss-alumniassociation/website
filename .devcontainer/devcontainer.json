@@ -12,12 +12,17 @@
     }
   },
 
-  "forwardPorts": [4000],
+  "forwardPorts": [4000, 35729],
 
   "portsAttributes": {
     "4000": {
       "label": "Jekyll preview",
       "onAutoForward": "openBrowser"
+    },
+    "35729": {
+      "label": "Jekyll LiveReload",
+      "onAutoForward": "silent",
+      "protocol": "http"
     }
   },
 

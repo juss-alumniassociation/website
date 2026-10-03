@@ -12,7 +12,7 @@ if [[ -n "${JEKYLL_BASEURL:-}" ]]; then
 fi
 
 if [[ "${JEKYLL_LIVERELOAD:-1}" == "1" ]]; then
-  serve_args+=(--livereload)
+  serve_args+=(--livereload --livereload-port "${JEKYLL_LIVERELOAD_PORT:-35729}")
 fi
 
-bundle exec jekyll serve "${serve_args[@]}"
+exec bundle exec ruby "$(dirname "${BASH_SOURCE[0]}")/serve.rb" serve "${serve_args[@]}"
