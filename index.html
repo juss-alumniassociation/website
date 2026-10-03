@@ -31,7 +31,7 @@ header_style: expandable
                     <p>We celebrate alumni stories and achievements, create opportunities to reconnect, and help alumni
                         contribute their experience, ideas and support to current students and future generations.</p>
                     <p class="signature">Katherine Norton<br><span>Chairperson, JUSSAA</span></p>
-                    <a class="text-link" href="/about/">More about JUSSAA <span aria-hidden="true">→</span></a>
+                    <a class="text-link" href="{{ '/about/' | relative_url }}">More about JUSSAA <span aria-hidden="true">→</span></a>
                 </div>
             </div>
         </section>
@@ -79,7 +79,7 @@ header_style: expandable
 
                 <div class="section-cta involvement-cta">
                     <p>Want to help shape the next chapter of JUSSAA?</p>
-                    <a class="text-link" href="/get-involved/">Explore ways to get involved <span
+                    <a class="text-link" href="{{ '/get-involved/' | relative_url }}">Explore ways to get involved <span
                             aria-hidden="true">→</span></a>
                 </div>
             </div>
@@ -98,7 +98,7 @@ header_style: expandable
                     </p>
                     <a class="text-link" href="https://www.tjss.ac.cy/page/?pid=2&amp;title=Alumni%20(JUSSAA)">Explore
                         the school alumni page <span aria-hidden="true">→</span></a>
-                    <p><a class="text-link" href="/history/">Explore JUSSAA history <span aria-hidden="true">→</span></a></p>
+                    <p><a class="text-link" href="{{ '/history/' | relative_url }}">Explore JUSSAA history <span aria-hidden="true">→</span></a></p>
                     <p><a class="text-link" href="mailto:{{ site.data.social.email }}?subject=JUSSAA%20-%20Share%20a%20memory">Share a memory <span aria-hidden="true">→</span></a></p>
                 </div>
             </div>
@@ -112,15 +112,15 @@ header_style: expandable
                 {% include news-list.html limit=3 %}
                 <h3>Upcoming events</h3>
                 {% include event-list.html kind='upcoming' %}
-                <a class="text-link" href="/news-events/">All news and events <span aria-hidden="true">→</span></a>
+                <a class="text-link" href="{{ '/news-events/' | relative_url }}">All news and events <span aria-hidden="true">→</span></a>
             </div>
         </section>
 
         <section class="support-prompt">
-            <div class="content-width"><p class="eyebrow">Give back</p><h2>Support JUSSAA</h2><p>Help sustain a connected alumni community and its links with the school.</p><a class="text-link" href="/support/">Ways to support JUSSAA <span aria-hidden="true">→</span></a></div>
+            <div class="content-width"><p class="eyebrow">Give back</p><h2>Support JUSSAA</h2><p>Help sustain a connected alumni community and its links with the school.</p><a class="text-link" href="{{ '/support/' | relative_url }}">Ways to support JUSSAA <span aria-hidden="true">→</span></a></div>
         </section>
 
-        <section class="section section-dark" id="contact">
+        <section class="section section-dark section-separated" id="contact">
             <div class="contact-layout">
                 <div>
                     <p class="eyebrow">Stay connected</p>

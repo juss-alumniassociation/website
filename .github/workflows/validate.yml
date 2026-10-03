@@ -16,5 +16,26 @@ jobs:
         with:
           ruby-version: "3.1"
           bundler-cache: true
-      - name: Validate site
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Static build validation
         run: ./scripts/check.sh
+      - name: Install Node test dependencies
+        run: npm ci
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Install Xvfb authorization helper
+        run: sudo apt-get install -y xauth
+      - name: Browser verification
+        run: ./scripts/test-ui.sh
+      - name: Upload Playwright report and failure artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-browser-artifacts
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14

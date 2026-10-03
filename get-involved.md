@@ -10,7 +10,7 @@ JUSSAA works best when alumni participate in ways that feel useful and manageabl
 
 ## Reconnect
 
-Find old classmates, rediscover shared memories and stay connected with alumni across generations and around the world. Follow JUSSAA through the social links on our [Contact page](/contact/).
+Find old classmates, rediscover shared memories and stay connected with alumni across generations and around the world. Follow JUSSAA through the social links on our [Contact page]({{ '/contact/' | relative_url }}).
 
 ## Take part
 

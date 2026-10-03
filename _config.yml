@@ -16,6 +16,13 @@ collections:
 
 exclude:
   - .devcontainer
+  - node_modules
+  - package.json
+  - package-lock.json
+  - playwright.config.ts
+  - tests
+  - test-results
+  - playwright-report
   - vendor
   - scripts
   - README.md

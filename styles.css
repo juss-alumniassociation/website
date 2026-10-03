@@ -115,13 +115,17 @@ img {
   );
 }
 
+.site-header-spacer--compact {
+  height: 141px;
+}
+
 /*
   The spacer is outside .site-header, so give it the same responsive values
   directly. These are intentionally fixed values; the nav layouts below are
   sized to match them.
 */
 @media (min-width: 851px) {
-  .site-header-spacer {
+  .site-header-spacer:not(.site-header-spacer--compact) {
     height: 347px;
   }
 }
@@ -347,7 +351,7 @@ img {
 
 .button-primary {
   background: var(--green);
-  color: var(--white);
+  color: #ffffff;
 }
 
 .button-primary:hover,
@@ -368,6 +372,10 @@ img {
 
 .section {
   padding: clamp(4rem, 8vw, 7.5rem) max(1rem, calc((100vw - var(--max)) / 2));
+}
+
+.section-separated {
+  margin-top: clamp(2rem, 4vw, 4rem);
 }
 
 .section-grid {
@@ -651,6 +659,10 @@ img {
     height: 297px;
   }
 
+  .site-header-spacer--compact {
+    height: 137px;
+  }
+
   .brand-logo--expanded {
     height: 175px;
     max-width: min(245px, 68vw);
@@ -727,11 +739,11 @@ img {
   .site-header {
     --masthead-expanded: 190px;
     --masthead-compact: 56px;
-    --nav-height: 112px;
+    --nav-height: 72px;
   }
 
   .site-header-spacer {
-    height: 270px;
+    height: 271px;
   }
 
   .brand-masthead {
@@ -758,7 +770,7 @@ img {
 
   .nav-wrap {
     display: block;
-    height: 112px;
+    height: 72px;
   }
 
   .site-nav {
@@ -909,9 +921,10 @@ img {
   .mobile-nav a:last-child { border-bottom: 0; }
 }
 @media (max-width: 600px) {
-  .nav-wrap { height: 62px; }
-  .site-header--compact .nav-wrap { height: 62px; }
-  .site-header-spacer { height: 261px; }
+  .nav-wrap { height: 72px; }
+  .site-header--compact .nav-wrap { height: 72px; }
+  .site-header-spacer:not(.site-header-spacer--compact) { height: 271px; }
+  .site-header-spacer--compact { height: 137px; }
   .page-intro { padding-top: 2.8rem; }
   .page-content { padding-top: 1.8rem; }
 }
