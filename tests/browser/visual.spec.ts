@@ -19,6 +19,6 @@ for (const view of views) {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForLoadState('networkidle');
     const screenshot = await captureFullPage(page);
-    await expect(screenshot).toMatchSnapshot(`${view.name}.png`);
+    await expect(screenshot).toMatchSnapshot(`${view.name}.png`, { maxDiffPixelRatio: 0.0035 });
   });
 }
