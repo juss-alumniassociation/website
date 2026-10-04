@@ -1,2 +1,12 @@
-collections_dir: tests/fixtures
+collections_dir: tests/fixtures/collections
+collections:
+  news:
+    output: true
+    permalink: /news/:name/
+  events:
+    output: true
+    permalink: /events/:name/
+  pages:
+    output: true
+    permalink: /:name/
 future: true

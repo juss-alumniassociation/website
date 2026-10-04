@@ -1,7 +1,9 @@
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, sitePath } from './fixtures';
 
-const routes = ['/', '/news-events/', '/support/', '/contact/'];
+const routes = process.env.TEST_FIXTURES === '1'
+  ? ['/visual-home/', '/visual-news-events/', '/visual-support/', '/visual-interior/']
+  : ['/', '/news-events/', '/support/', '/contact/'];
 
 for (const colorScheme of ['light', 'dark'] as const) {
   test(`WCAG color contrast passes in ${colorScheme} mode on representative pages`, async ({ page }) => {

@@ -28,3 +28,20 @@ for (const route of routes) {
     }
   });
 }
+
+test('real News and Event records and their links render safely when present', async ({ page }) => {
+  await page.goto(sitePath('/news-events/'));
+  const itemLinks = page.locator('.content-list a');
+  for (const link of await itemLinks.all()) {
+    const href = await link.getAttribute('href');
+    expect(href, 'collection entry should have a destination').toBeTruthy();
+    expect(href).toMatch(/^\/preview\/(?:news|events)\//);
+    await link.click();
+    await expect(page.locator('main h1')).toBeVisible();
+    for (const relatedLink of await page.locator('.related-links a').all()) {
+      const target = await relatedLink.getAttribute('href');
+      expect(target, 'related link should have a destination').toMatch(/^https?:\/\//);
+    }
+    await page.goBack();
+  }
+});
