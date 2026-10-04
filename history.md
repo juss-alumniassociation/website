@@ -8,7 +8,7 @@ permalink: /history/
 
 The school’s history lives in the memories of the people who learned, worked and grew there. Alumni accounts, photographs, written recollections and school records can help tell that shared story across generations.
 
-This page is a home for those stories as they become available. The [school alumni page](https://www.tjss.ac.cy/page/?pid=2&title=Alumni%20(JUSSAA)) provides existing school-hosted alumni and historical material.
+This page is a home for those stories as they become available. The [school alumni page]({{ site.data.social.home }}) provides existing school-hosted alumni and historical material.
 
 ## Share a memory
 
