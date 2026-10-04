@@ -22,5 +22,9 @@ for (const route of routes) {
       expect(headingTop, 'interior heading should clear the fixed header').toBeGreaterThanOrEqual(fixedHeaderBottom);
     }
     await expectShellAssets(page);
+    if (route.path === '/') {
+      await expect(page.locator('meta[name="theme-color"][media="(prefers-color-scheme: light)"]')).toHaveAttribute('content', '#21632C');
+      await expect(page.locator('meta[name="theme-color"][media="(prefers-color-scheme: dark)"]')).toHaveAttribute('content', '#174820');
+    }
   });
 }

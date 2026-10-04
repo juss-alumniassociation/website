@@ -42,15 +42,20 @@ test('events are grouped by date and optional event fields and links render clea
   await expect(page.locator('.listing-meta')).not.toContainText('·');
 });
 
-test('homepage separates Support and Stay connected sections on desktop and mobile', async ({ page }) => {
+test('homepage keeps Support and Stay connected adjacent with comfortable inner spacing', async ({ page }) => {
   await page.goto(sitePath('/'));
   for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
     await page.setViewportSize(viewport);
-    const gap = await page.locator('#contact').evaluate(section => {
+    const measurements = await page.locator('#contact').evaluate(section => {
       const preceding = section.previousElementSibling;
-      if (!preceding) return -1;
-      return section.getBoundingClientRect().top - preceding.getBoundingClientRect().bottom;
+      const lastLink = preceding?.querySelector('a:last-of-type');
+      if (!preceding || !lastLink) return { gap: -1, innerPadding: -1 };
+      return {
+        gap: section.getBoundingClientRect().top - preceding.getBoundingClientRect().bottom,
+        innerPadding: preceding.getBoundingClientRect().bottom - lastLink.getBoundingClientRect().bottom,
+      };
     });
-    expect(gap, `expected clear section separation at ${viewport.width}px`).toBeGreaterThanOrEqual(30);
+    expect(measurements.gap, `sections should meet without a blank band at ${viewport.width}px`).toBe(0);
+    expect(measurements.innerPadding, `Support section should retain breathing room at ${viewport.width}px`).toBeGreaterThanOrEqual(30);
   }
 });
