@@ -3,15 +3,15 @@ import { test, expect, sitePath } from './fixtures';
 
 const routes = process.env.TEST_FIXTURES === '1'
   ? ['/visual-home/', '/visual-news-events/', '/visual-support/', '/visual-interior/']
-  : ['/', '/news-events/', '/support/', '/contact/'];
+  : ['/', '/about/', '/news-events/', '/support/', '/contact/'];
 
 for (const colorScheme of ['light', 'dark'] as const) {
   test(`WCAG color contrast passes in ${colorScheme} mode on representative pages`, async ({ page }) => {
     await page.emulateMedia({ colorScheme, reducedMotion: 'reduce' });
     for (const route of routes) {
       await page.goto(sitePath(route));
-      const results = await new AxeBuilder({ page }).withRules(['color-contrast']).analyze();
-      expect(results.violations, `${colorScheme} contrast violations on ${route}: ${JSON.stringify(results.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => ({ target: n.target, summary: n.failureSummary })) })))}`).toEqual([]);
+      const results = await new AxeBuilder({ page }).analyze();
+      expect(results.violations, `${colorScheme} Axe violations on ${route}: ${JSON.stringify(results.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => ({ target: n.target, summary: n.failureSummary })) })))}`).toEqual([]);
     }
   });
 }

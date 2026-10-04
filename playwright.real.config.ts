@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 const port = process.env.JEKYLL_PORT ?? '4173';
 export default defineConfig({
   testDir: './tests/browser',
-  testMatch: /.*(?:smoke|navigation|contrast)\.spec\.ts/,
+  testMatch: /.*(?:smoke|navigation|contrast|hardening)\.spec\.ts/,
   fullyParallel: true,
   workers: 2,
   reporter: [['list'], ['html', { outputFolder: 'playwright-report/real', open: 'never' }]],
@@ -15,7 +15,7 @@ export default defineConfig({
   webServer: {
     command: `JEKYLL_PORT=${port} JEKYLL_CONFIG=_config.yml JEKYLL_BASEURL=/preview JEKYLL_LIVERELOAD=0 ./scripts/serve.sh`,
     url: `http://127.0.0.1:${port}/preview/`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 120_000,
   },
 });
