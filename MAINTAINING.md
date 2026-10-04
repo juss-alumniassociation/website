@@ -13,7 +13,7 @@ This guide is for routine Association updates in a web browser. You need a GitHu
 ## Add a News item
 
 1. Choose **Add file** → **Create new file**. In the filename box, enter `_news/alumni-achievement.md` (use lowercase words and hyphens). GitHub creates the folder path as it saves the new file.
-3. Paste this at the top and replace the example values:
+2. Paste this at the top and replace the example values:
 
 ```yaml
 ---
@@ -24,8 +24,8 @@ summary: A short description of the update.
 ---
 ```
 
-4. Add an optional longer story below the second `---`. If the update is only a short listing, leave the body empty.
-5. Commit the new file. News appears in the News & Events page and the newest items appear on Home.
+3. Add an optional longer story below the second `---`. If the update is only a short listing, leave the body empty.
+4. Commit the new file. News appears in the News & Events page and the newest items appear on Home.
 
 ## Edit or remove News
 
@@ -57,6 +57,8 @@ links:
 Upcoming and past sections are calculated from the event date when the site is built. An event dated today or later appears under Upcoming; an earlier date appears under Past. You do not move the file between folders.
 
 ### Related links are optional
+
+The technical validation runs automatically after a change. If it reports a News or Event filename, correct the named field in that file. For `date must use YYYY-MM-DD`, edit the `date:` value to a real calendar date in that format (for example `2026-11-06`). A message such as `links[1].url uses unsupported scheme` refers to the URL in the second link entry. Change that `url:` to begin with `https://`, `http://`, or `mailto:`; keep its label and indentation. If you do not need that link, remove its `- label:` and `url:` lines. A `links` value must be a list using `- label:` entries; each entry needs both a non-empty label and URL. For example, `links: Facebook` is not a list, and `javascript:` links are not allowed. An empty list (`links: []`) or omitting the field is fine.
 
 A `links:` block can contain any number of label and URL pairs, including links to any website or social platform. It can contain one link, several links, or none. Missing `links:` is valid. You may remove the entire block if there are no related links, or keep it empty as `links: []`. Do not remove the indentation from the nested `label` and `url` lines when editing a list.
 
