@@ -1,0 +1,12 @@
+---
+layout: null
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{% assign public_pages = site.pages | sort: 'url' %}
+{% for page in public_pages %}{% if page.url == '/' or page.url == '/about/' or page.url == '/history/' or page.url == '/news-events/' or page.url == '/get-involved/' or page.url == '/support/' or page.url == '/contact/' %}{% unless page.noindex %}
+  <url><loc>{{ page.url | prepend: site.production_url | xml_escape }}</loc></url>
+{% endunless %}{% endif %}{% endfor %}
+{% assign news_items = site.news | sort: 'date' %}{% for item in news_items %}{% unless item.noindex %}<url><loc>{{ item.url | prepend: site.production_url | xml_escape }}</loc></url>{% endunless %}{% endfor %}
+{% assign event_items = site.events | sort: 'date' %}{% for item in event_items %}{% unless item.noindex %}<url><loc>{{ item.url | prepend: site.production_url | xml_escape }}</loc></url>{% endunless %}{% endfor %}
+</urlset>

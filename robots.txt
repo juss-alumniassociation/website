@@ -1,0 +1,6 @@
+---
+---
+User-agent: *
+Allow: /
+
+Sitemap: {{ '/sitemap.xml' | prepend: site.production_url }}

@@ -2,6 +2,7 @@ title: JUSSAA
 description: The Junior & Senior School Alumni Association
 
 url: "https://jussaa.org"
+production_url: "https://jussaa.org"
 baseurl: ""
 
 markdown: kramdown
