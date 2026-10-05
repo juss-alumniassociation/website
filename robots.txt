@@ -3,4 +3,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: {{ '/sitemap.xml' | prepend: site.production_url }}
+{% assign metadata_base_url = site.production_url %}{% if site.demo %}{% assign metadata_base_url = site.url | append: site.baseurl %}{% endif %}
+Sitemap: {{ '/sitemap.xml' | prepend: metadata_base_url }}

@@ -3,6 +3,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% assign meta_description = page.description | default: page.summary | default: site.description %}
     {% assign meta_title = site.title %}
+    {% assign metadata_base_url = site.production_url %}
+    {% if site.demo %}{% assign metadata_base_url = site.url | append: site.baseurl %}{% endif %}
     {% if page.title %}{% assign meta_title = page.title | append: ' | ' | append: site.title %}{% elsif page.url == '/' %}{% assign meta_title = site.title | append: ' | ' | append: site.description %}{% endif %}
     <meta name="description" content="{{ meta_description | strip_html | normalize_whitespace | escape }}">
     <meta name="theme-color" content="#21632C">
@@ -10,15 +12,15 @@
     <meta name="theme-color" content="#174820" media="(prefers-color-scheme: dark)">
     <meta name="color-scheme" content="light dark">
     <title>{{ meta_title | strip_html | normalize_whitespace | escape }}</title>
-    <link rel="canonical" href="{{ page.url | prepend: site.production_url | escape }}">
+    <link rel="canonical" href="{{ page.url | prepend: metadata_base_url | escape }}">
     <meta property="og:title" content="{{ meta_title | strip_html | normalize_whitespace | escape }}">
     <meta property="og:description" content="{{ meta_description | strip_html | normalize_whitespace | escape }}">
-    <meta property="og:url" content="{{ page.url | prepend: site.production_url | escape }}">
+    <meta property="og:url" content="{{ page.url | prepend: metadata_base_url | escape }}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="{{ site.title | escape }}">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="{{ meta_title | strip_html | normalize_whitespace | escape }}">
     <meta name="twitter:description" content="{{ meta_description | strip_html | normalize_whitespace | escape }}">
-    {% if page.noindex %}<meta name="robots" content="noindex">{% endif %}
+    {% if page.noindex or site.demo %}<meta name="robots" content="noindex">{% endif %}
     <link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
 </head>

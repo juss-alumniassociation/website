@@ -1,0 +1,88 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches: [jekyll]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.ref == 'refs/heads/jekyll'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+          bundler-cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Static build validation
+        run: ./scripts/check.sh
+      - name: Install Node test dependencies
+        run: npm ci
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Install Xvfb authorization helper
+        run: sudo apt-get install -y xauth
+      - name: Browser verification
+        run: ./scripts/test-ui.sh
+      - name: LiveReload regression verification
+        run: ./scripts/test-live-reload.sh
+      - name: Upload Playwright report and failure artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-browser-artifacts
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+  build:
+    if: github.ref == 'refs/heads/jekyll'
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+          bundler-cache: true
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+      - name: Build with Jekyll
+        env:
+          PAGES_URL: ${{ steps.pages.outputs.page_url }}
+          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+        run: ./scripts/check-pages-build.sh
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+  deploy:
+    if: github.ref == 'refs/heads/jekyll'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -61,7 +61,15 @@ The browser suite runs Axe's stable default WCAG oriented rules against represen
 
 ### Public metadata and discovery files
 
-The shared `_includes/head.html` creates concise titles, uses `page.description` with `site.description` as fallback, and emits canonical, Open Graph and Twitter summary metadata from the configured production URL. No social image metadata is emitted because there is no approved sharing image. Set `noindex: true` only for pages that should not be indexed; the custom `404.html` uses it. `robots.txt` allows public crawling and points to `sitemap.xml`. The sitemap lists public pages and generated News/Event items, excluding noindex pages, the 404 and test fixture routes.
+The shared `_includes/head.html` creates concise titles, uses `page.description` with `site.description` as fallback, and emits canonical, Open Graph and Twitter summary metadata from the configured site URL. No social image metadata is emitted because there is no approved sharing image. Set `noindex: true` only for pages that should not be indexed; the custom `404.html` uses it. `robots.txt` allows public crawling and points to `sitemap.xml`. The sitemap lists public pages and generated News/Event items, excluding noindex pages, the 404 and test fixture routes.
+
+### Temporary GitHub Pages demonstration
+
+The `jekyll` branch is the source for the temporary project site at <https://juss-alumniassociation.github.io/website/>. `.github/workflows/pages.yml` runs the existing validation suite, builds with Jekyll, uploads the Pages artifact, then deploys it with GitHub's official Pages actions. Pull requests and other branches validate without deploying. A push to `jekyll` deploys only after all validation checks pass; manual redeployment is also available from that branch with `workflow_dispatch`.
+
+The demo overlay `_config.demo.yml` sets `demo: true`. After `actions/configure-pages` supplies the deployment `page_url` and `base_path`, `scripts/check-pages-build.sh` writes a temporary runtime config with the Pages origin and project base path, then builds using the production config plus the demo overlay. Templates combine the configured origin and base path for canonical and Open Graph URLs, sitemap entries, and the sitemap reference in `robots.txt`; production builds continue to use `production_url`. `relative_url` prefixes internal links and assets with `/website`. The shared head emits `noindex` for every demo page while keeping production pages indexable unless their front matter opts out.
+
+To build and verify this form locally, run `./scripts/check-pages-build.sh`. It builds `_site` under `/website` and checks the required routes, metadata, discovery files, and static asset paths. The repository owner must select **Settings → Pages → Build and deployment → Source → GitHub Actions** to enable the workflow. The generated site is uploaded as the standard Pages artifact; no `gh-pages` branch is used.
 
 The branded `404.html` is the static host's not-found page. It links to Home, News & Events and Contact and does not redirect. The generated-site checker validates local page/asset references, available fragments, fixture isolation and discovery output. It does not test whether an external site is online.
 
